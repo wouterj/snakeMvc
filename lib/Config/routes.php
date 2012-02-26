@@ -1,7 +1,9 @@
 <?php
 
 namespace snakeMvc\Framework\Config;
+use snakeMvc\Framework\Config\Parser\IniParser;
 
+define(BUNDLE_ROOT, sprintf(__DIR__.'..%1$s..%1$sapp%1$sWouterJ%1$s', DIRECTORY_SEPARATOR));
 /**
  * Get the routes
  *
@@ -9,7 +11,7 @@ namespace snakeMvc\Framework\Config;
  * @package snakeMvc
  * @subpackage Config
  */
-class Route
+class Routes
 {
 	/**
 	 * All routes from the routes.ini file
@@ -38,6 +40,21 @@ class Route
 	 */
 	protected static function generateRoutes()
 	{
-		$routeParser = new IniParser('');
+		$routeParser = new IniParser(file_get_contents('%sconfig%sroutes.ini', BUNDLE_ROOT, DIRECTORY_SEPARATOR));
+		$data = $routeParser->parse(true);
+
+		foreach( $data as $path => $info )
+		{
+			if( preg_match('/{(.*?)}/', $path, $params) )
+			{
+				array_shift($params);
+				$data[$path]['params'] = Array();
+
+				foreach( $params as $param )
+				{
+					$data[$path]['params'][] = $param;
+				}
+			}
+		}
 	}
 }
