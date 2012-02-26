@@ -40,11 +40,11 @@ EOT;
 [foo_settings]
 database = "{
   user : foo,
-  pass : bar
+  bar : admin
 }"
 EOT;
 		$parser = new IniParser($iniStr);
 
-		$this->assertEquals('foo', $parser->parse()->foo_settings['database']['pass']);
+		$this->assertEquals('foo', $parser->parse()->foo_settings['database']['user']);
 	}
 }
