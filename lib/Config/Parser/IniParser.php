@@ -29,16 +29,21 @@ class IniParser extends AbstractParser
 			foreach( $section as $key => $value )
 			{
 				$k = explode('.', $key);
+				# Handle foo.bar foo.someVar as arrays
 				if( count($k) > 1 )
 					$file[$sectionName][$k[0]][$k[1]] = $value;
-				elseif( strpos($value, '{') === 0 )
-				{
-					$items = explode(',',substr($value, 1,-1));
 
-					foreach( $items as $value )
+				# Handle foo = { bar = hello, someVar = something } as arrays
+				if( strpos($value, '{') === 0 )
+				{
+					$file[$sectionName][$key] = Array();
+					$v = explode(',', substr($value, 1, -1));
+
+					foreach( $v as $vVal )
 					{
-					  $item = explode(':', $value);
-					  $file[$sectionName][$key][trim($item[0])] = trim($item[1]);
+						$info = explode(':', $vVal);
+
+						$file[$sectionName][$key][trim($info[0])] = trim($info[1]);
 					}
 				}
 			};

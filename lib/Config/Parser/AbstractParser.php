@@ -1,5 +1,4 @@
 <?php
-
 namespace snakeMvc\Framework\Config\Parser;
 
 /**
