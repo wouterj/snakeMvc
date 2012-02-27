@@ -2,8 +2,6 @@
 
 namespace snakeMvc\Framework\Config\Parser;
 
-require_once __DIR__.'\AbstractParser.php';
-
 /**
  * The parser for ini files
  *
@@ -31,7 +29,10 @@ class IniParser extends AbstractParser
 				$k = explode('.', $key);
 				# Handle foo.bar foo.someVar as arrays
 				if( count($k) > 1 )
+				{
+					unset($file[$sectionName][$key]);
 					$file[$sectionName][$k[0]][$k[1]] = $value;
+				}
 
 				# Handle foo = { bar = hello, someVar = something } as arrays
 				if( strpos($value, '{') === 0 )

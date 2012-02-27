@@ -3,6 +3,7 @@
 namespace snakeMvc\Tests\Config\Parser;
 use snakeMvc\Framework\Config\Parser\IniParser;
 
+require_once __DIR__.'\..\..\..\lib\Config\Parser\AbstractParser.php';
 require_once __DIR__.'\..\..\..\lib\Config\Parser\IniParser.php';
 
 class IniParserTest extends \PHPUnit_Framework_TestCase

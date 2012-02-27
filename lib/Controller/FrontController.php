@@ -1,7 +1,7 @@
 <?php
 
 namespace snakeMvc\Framework\Controller;
-use snakeMvc\Framework\Config\IniParser;
+use snakeMvc\Framework\Config\Routes;
 
 /**
  * This object handles the incomming requests
@@ -59,5 +59,14 @@ class FrontController
 	public function dispatch( $path )
 	{
 		$routes = Routes::getRoutes();
+		foreach( $routes as $route => $action )
+		{
+			$route = /welcome/{slug};
+			$path = /welcome/hello/;
+			if( preg_match('/'.preg_replace('/{.*?}/', '(.*?)', $route).'/', $path) )
+			{
+				break;
+			}
+		}
 	}
 }
