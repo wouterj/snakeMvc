@@ -49,15 +49,15 @@ class Routes
 		{
 			if( preg_match_all('/\(*\/{(\w*?)}\)*/', $path, $params) )
 			{
-				var_dump($params);
-
-				foreach( $params as $param )
+				foreach( $params[0] as $key => $param )
 				{
-					$info['params'][] = $param;
+					$optional = ( $param[0] === '('
+									? true
+									: false );
+					$info['params'][$params[1][$key]] = $optional;
 				}
 			}
-			//$routes[$path] = new Route($path, $info);
-			$routes[$path] = $info;
+			$routes[$path] = new Route($path, $info);
 		}
 		return $routes;
 	}

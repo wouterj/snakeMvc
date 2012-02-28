@@ -30,9 +30,11 @@ class Route
 		{
 			$params = $data['params'];
 
-			foreach( $params as $param )
+			foreach( $params as $param => $optional )
 			{
-				$this->params[$param] = Array();
+				$this->params[$param] = Array(
+					'optional' => $optional
+				);
 
 				if( isset($data['where'][$param]) )
 					$this->params[$param]['condition'] = $data['where'][$param];
@@ -50,20 +52,38 @@ class Route
 	 */
 	public function matches( $path )
 	{
-		$rgx = '/^';
+		if( $this->rgx == '' )
+			$this->makeRgx();
+		return (bool) preg_match($this->rgx, $path);
+	}
+
+	/**
+	 * Make the regex, if not already maked
+	 *
+	 * @access protected
+	 */
+	protected function makeRgx()
+	{
+		$rgx = '';
 
 		$rgx .= ( $this->path[0] !== '/'
-					? '/'.$this->path
-					: $this->path
+					? '/'.preg_replace('/\/*{.*?}\/*/', '', $this->path)
+					: preg_replace('/\(*\/*{.*?}\/*\)*/', '', $this->path)
 				);
 
 		foreach( $this->params as $paramPath => $paramInfo )
 		{
 			if( isset($paramInfo['condition']) )
-			{
-			}
+				$block = '(['.$paramInfo['condition'].']*?)';
+			else
+				$block = '(.*?)';
+
+			if( $paramInfo['optional'] )
+				$rgx .= '(?:/'.$block.')*';
+			else
+				$rgx .= '/'.$block;
 		}
 
-		$rgx .= '$/';
+		$this->_rgx = '/^'.str_replace('/', '\/', $rgx).'$/';
 	}
 }

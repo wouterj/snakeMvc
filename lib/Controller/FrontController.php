@@ -59,7 +59,11 @@ class FrontController
 	public function dispatch( $path )
 	{
 		$routes = Routes::getRoutes();
+		var_dump($routes);
 
-		//var_dump($routes);
+		foreach( $routes as $r )
+		{
+			$r->matches('/home');
+		}
 	}
 }
