@@ -59,7 +59,7 @@ class FrontController
 			{
 				$controller = 'snakeMvc\Bundle\WouterJ\Controllers\\'.$r->getController().'Controller';
 				$controller = new $controller();
-				$controller->{$r->getAction()}('Wouter');
+				call_user_func_array(array($controller, $r->getAction()), $r->getParams());
 			}
 		}
 	}

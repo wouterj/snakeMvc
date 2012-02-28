@@ -76,6 +76,21 @@ class Route
 		return false;
 	}
 
+	public function getParams()
+	{
+		$params = Array();
+
+		foreach( $this->params as $param )
+		{
+			if( !isset($param['value']) || $param['value'] == '' )
+				$param['value'] = ( isset($param['default'])
+										? $param['default']
+										: '' );
+			$params[] = $param['value'];
+		}
+		return $params;
+	}
+
 	public function getPath()
 	{
 		return $this->path;
@@ -118,6 +133,6 @@ class Route
 				$rgx .= '/'.$block;
 		}
 
-		$this->_rgx = '/^'.str_replace('/', '\/', $rgx).'$/';
+		$this->_rgx = '/^'.str_replace('/', '\/', $rgx).'\/?$/';
 	}
 }
