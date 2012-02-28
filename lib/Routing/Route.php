@@ -9,12 +9,16 @@ namespace snakeMvc\Framework\Routing;
  * @package snakeMvc
  * @subpackage Routing
  * @property string $path The path of the route
+ * @property string $action The controller and action for the route
  * @property array $params All params of the route
+ * @property string $_rgx The matching regex for checking if route matches with path
  */
 class Route
 {
 	protected $path = '';
+	protected $action = '';
 	protected $params = Array();
+	protected $_rgx = '';
 
 	/**
 	 * Set the path and all extra info, as params, defaults, conditions, ect.
@@ -25,6 +29,7 @@ class Route
 	public function __construct( $path, array $data )
 	{
 		$this->path = $path;
+		$this->action = $data['to'];
 
 		if( isset($data['params']) )
 		{
@@ -52,9 +57,38 @@ class Route
 	 */
 	public function matches( $path )
 	{
-		if( $this->rgx == '' )
+		if( $this->_rgx == '' )
 			$this->makeRgx();
-		return (bool) preg_match($this->rgx, $path);
+		
+		if( preg_match($this->_rgx, $path, $params) )
+		{
+			array_shift($params);
+			$keys = array_keys($this->params);
+			reset($keys);
+
+			foreach( $params as $p )
+			{
+				$this->params[current($keys)]['value'] = $p;
+				next($keys);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public function getPath()
+	{
+		return $this->path;
+	}
+
+	public function getController()
+	{
+		return reset(explode('::', $this->action));
+	}
+
+	public function getAction()
+	{
+		return end(explode('::', $this->action));
 	}
 
 	/**

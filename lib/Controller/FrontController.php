@@ -20,13 +20,6 @@ class FrontController
 	 */
 	protected static $instance;
 
-	/**
-	 * The routes
-	 *
-	 * @var array
-	 */
-	protected $routes = array();
-
 	final public function __wakeup()
 	{
 		throw new BadMethodCallException(sprintf('%s is a singleton, it is not allowed to serialize it.', __CLASS__));
@@ -59,11 +52,15 @@ class FrontController
 	public function dispatch( $path )
 	{
 		$routes = Routes::getRoutes();
-		var_dump($routes);
 
 		foreach( $routes as $r )
 		{
-			$r->matches('/home');
+			if( $r->matches($path) === true )
+			{
+				$controller = 'snakeMvc\Bundle\WouterJ\Controllers\\'.$r->getController().'Controller';
+				$controller = new $controller();
+				$controller->{$r->getAction()}('Wouter');
+			}
 		}
 	}
 }
