@@ -4,6 +4,8 @@ namespace snakeMvc\Framework;
 use snakeMvc\Framework\Loader\ClassLoader;
 use snakeMvc\Framework\Controller\FrontController;
 
+ini_set('xdebug.var_display_max_depth', 5);
+
 require_once 'lib/Loader/ClassLoader.php';
 
 /*
