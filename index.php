@@ -21,12 +21,21 @@ define('LIB_ROOT', __DIR__.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR);
 $classloader = new ClassLoader;
 
 $classloader->setNamespaces(array(
-	'snakeMvc\Framework' => 'snakeMvc\lib',
-	'snakeMvc\Bundle' => 'snakeMvc\app',
-	'snakeMvc\\' => ''
+	'snakeMvc\Framework' => 'lib\snakeMvc',
+	'snakeMvc\Bundle' => 'app',
 ));
 
 $classloader->register();
+
+$thirdPartyLoader = new ThirdPartyLoader;
+
+$thirdPartyLoader->setPrefixes(array(
+	'Twig_' => 'Twig\lib\Twig'
+));
+
+$thirdPartyLoader->setBaseDir(__DIR__.'/vendor/');
+
+$thirdPartyLoader->register();
 
 /*
  * the main code
