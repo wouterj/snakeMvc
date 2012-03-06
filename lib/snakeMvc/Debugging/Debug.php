@@ -15,6 +15,9 @@ class Debug
 		'string' => '#C00',
 		'int'    => '#4E9A06',
 		'float'  => '#F57900',
+		'bool' => '#75507B',
+		'null' => '#3465A4',
+		'resource' => '#53A434',
 	);
 	public static function dump(  )
 	{
@@ -42,6 +45,19 @@ class Debug
 				# @handle floats
 				# @become float 12.12
 				$text = "<small>float</small> <font color=\"".$colors->float."\">".$arg."</font>";
+			}
+			elseif( $type === 'boolean' )
+			{
+				# @handle booleans
+				# @become boolean true
+				$bools = array('true' => true, 'false' => false);
+				$text = "<small>boolean</small> <font color=\"".$colors->bool."\">".array_search($arg, $bools)."</font>";
+			}
+			elseif( $type === 'NULL' )
+			{
+				# @handle NULL
+				# @become null
+				$text = "<font color=\"".$colors->null."\">null</font>";
 			}
 			elseif( $type === 'array' )
 			{
@@ -102,8 +118,16 @@ class Debug
 				}
 				$text .= "}";
 			}
+			elseif( $type == 'resource' )
+			{
+				$text = '<small>resource</small> <font color="'.$colors->resource.'">'.get_resource_type($arg)."</font>";
+			}
+			else
+			{
+				$text = '<small>'.$type.'</small> '.$arg;
+			}
 
-			if( end($args) === true )
+			if( end($args) === true && count($args) > 1 )
 				return $text;
 			echo '<pre>'.$text.'</pre>';
 		}
