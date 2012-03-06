@@ -19,6 +19,7 @@ class Debug
 		'null' => '#3465A4',
 		'resource' => '#53A434',
 	);
+
 	public static function dump(  )
 	{
 		$args = func_get_args();
