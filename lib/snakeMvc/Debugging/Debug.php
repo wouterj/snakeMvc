@@ -66,14 +66,40 @@ class Debug
 				#			private $foo = Array()
 				#			public $bar
 				#		  }
-				$arg = print_r($arg, true);
-				preg_match('/(.*?)\sObject\s\((.*)\)/s', $arg, $object);
+				$a = print_r($arg, true);
+				preg_match('/(.*?)\sObject\s\((.*)\)/s', $a, $object);
 
 				list(, $name, $items) = $object;
 
-				echo $name, '<br>', $items;
+				preg_match_all('/\[(.*?)(?::(.*?))*\]\s=>\s(.*?)(?=(?:\[|$))/s', $items, $itms);
 
-				$text  = "<small>object</small> Test {\n";
+				$text  = "<small>object</small> ".$name." {\n";
+				// add variables
+				foreach( $itms[0] as $id => $item )
+				{
+					$text .= "\t".( $itms[2][$id] !== ''
+										? $itms[2][$id]
+										: 'public'
+								  )." $".$itms[1][$id];
+
+					if( !preg_match('/^\s*?$/', $itms[3][$id] ) )
+					{
+						if( preg_match('/Array.(.)/s', $itms[3][$id]) )
+							$itms[3][$id] = 'Array()';
+						$text .= ' = '.( $itms[3][$id] !== 'Array()'
+											? self::dump($itms[3][$id], true)
+											: trim($itms[3][$id])
+									   );
+					}
+					$text .= ";\n";
+				}
+
+				// add methods
+				$methods = get_class_methods($arg);
+				foreach( $methods as $method )
+				{
+					$text .= "\n\tpublic function ".$method."();\n";
+				}
 				$text .= "}";
 			}
 
