@@ -17,41 +17,39 @@ class IniParser extends AbstractParser
 	 * @param boolean $getArray Default false, sets it to true if you want a array
 	 * @return array|object $file The parse results, array if param is true
 	 */
-	public function parse( $getArray = false )
-	{
-		// NOTE this function requires PHP5.3.0, use parse_ini_file for comptability with PHP5
-		$file = parse_ini_string($this->file, true);
+    public function parse( $getArray = false )
+    {
+        // NOTE this function requires PHP5.3.0, use parse_ini_file for comptability with PHP5
+        $file = parse_ini_string($this->file, true);
 
-		foreach( $file as $sectionName => $section )
-		{
-			foreach( $section as $key => $value )
-			{
-				$k = explode('.', $key);
-				# Handle foo.bar foo.someVar as arrays
-				if( count($k) > 1 )
-				{
-					unset($file[$sectionName][$key]);
-					$file[$sectionName][$k[0]][$k[1]] = $value;
-				}
+        foreach ($file as $sectionName => $section) {
+            foreach ($section as $key => $value) {
+                $k = explode('.', $key);
 
-				# Handle foo = { bar = hello, someVar = something } as arrays
-				if( strpos($value, '{') === 0 )
-				{
-					$file[$sectionName][$key] = Array();
-					$v = explode(',', substr($value, 1, -1));
+                # Handle foo.bar foo.someVar as arrays
+                if (count($k) > 1) {
+                    unset($file[$sectionName][$key]);
 
-					foreach( $v as $vVal )
-					{
-						$info = explode(':', $vVal);
+                    $file[$sectionName][$k[0]][$k[1]] = $value;
+                }
 
-						$file[$sectionName][$key][trim($info[0])] = trim($info[1]);
-					}
-				}
-			};
-		};
+                # Handle foo = { bar = hello, someVar = something } as arrays
+                if (strpos($value, '{') === 0)
+                {
+                    $file[$sectionName][$key] = Array();
+                    $v = explode(',', substr($value, 1, -1));
 
-		return ($getArray 
-					? $file 
-					: ((object) $file));
-	}
+                    foreach ($v as $vVal) {
+                        $info = explode(':', $vVal);
+
+                        $file[$sectionName][$key][trim($info[0])] = trim($info[1]);
+                    }
+                }
+            }
+        }
+
+        return ($getArray 
+                    ? $file 
+                    : ((object) $file));
+    }
 }

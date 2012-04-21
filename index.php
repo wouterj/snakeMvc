@@ -2,18 +2,23 @@
 
 namespace snakeMvc\Framework;
 use snakeMvc\Framework\Loader\ClassLoader;
+use snakeMvc\Framework\Loader\ThirdPartyLoader;
+use snakeMvc\Framework\Config\Parser\IniParser;
 use snakeMvc\Framework\Controller\FrontController;
 
-ini_set('xdebug.var_display_max_depth', 5);
+// for debugging routes
+// ini_set('xdebug.var_display_max_depth', 5);
 
-require_once 'lib/Loader/ClassLoader.php';
+chdir(__DIR__);
+
+require_once 'lib/snakeMvc/Loader/ClassLoader.php';
+require_once 'lib/vendor/Twig/lib/Twig/Autoloader.php';
 
 /*
  * Define some constants
  */
 define('ROOT', __DIR__.DIRECTORY_SEPARATOR);
 define('LIB_ROOT', __DIR__.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR);
-
 
 /*
  * Register the class loader
@@ -27,25 +32,25 @@ $classloader->setNamespaces(array(
 
 $classloader->register();
 
-$thirdPartyLoader = new ThirdPartyLoader;
+/* And the Twig classloader */
+\Twig_Autoloader::register();
 
-$thirdPartyLoader->setPrefixes(array(
-	'Twig_' => 'Twig\lib\Twig'
-));
+/*
+ * Define some more constants
+ */
+$config = parse_ini_file(ROOT.'/config/config.ini', true);
 
-$thirdPartyLoader->setBaseDir(__DIR__.'/vendor/');
-
-$thirdPartyLoader->register();
+define('APP_NAME', $config['apps']['active']);
+define('APP_ROOT', ROOT.'app/'.APP_NAME.'/');
 
 /*
  * the main code
  */
-$uri = $_SERVER['REQUEST_URI'];
-if( ($pos = strripos($uri, 'index.php')) )
-	$uri = substr($uri, $pos + 9);
-else
-	$uri = '/';
+$uri = preg_split('/snakeMvc\/(index.php)*/', $_SERVER['REQUEST_URI']);
+
+if( empty($uri[1]) )
+	$uri[1] = '/';
 
 $frontController = FrontController::getInstance();
 
-$frontController->dispatch($uri);
+$frontController->dispatch($uri[1]);

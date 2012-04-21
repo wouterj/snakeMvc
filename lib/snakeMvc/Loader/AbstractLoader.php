@@ -9,7 +9,7 @@ namespace snakeMvc\Framework\Loader;
  * @package snakeMvc
  * @subpackage Loader
  */
-abstract class Loader
+abstract class AbstractLoader
 {
 	/**
 	 * Predefined namespaces and their paths
@@ -40,7 +40,7 @@ abstract class Loader
 	 */
 	public function setPrefixes( $name, $path = null )
 	{
-		if( (is_array($name)) && ($path === null) )
+		if ( (is_array($name)) && ($path === null) )
 			$this->prefixes = $name;
 		else
 			$this->prefixes[$name] = $path;
@@ -54,7 +54,7 @@ abstract class Loader
 	 */
 	public function setNamespaces( $name, $path = null )
 	{
-		if( (is_array($name)) && ($path === null) )
+		if ( (is_array($name)) && ($path === null) )
 			$this->namespaces = $name;
 		else
 			$this->namespaces[$name] = $path;

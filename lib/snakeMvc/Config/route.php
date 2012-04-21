@@ -11,14 +11,14 @@ namespace snakeMvc\Framework\Config;
  */
 class Route
 {
-	/**
-	 * All routes from the routes.ini file
-	 *
-	 * @var array
-	 */
-	protected static $routes;
+    /**
+     * All routes from the routes.ini file
+     *
+     * @var array
+     */
+    protected static $routes;
 
-	public static function getRoutes()
-	{
-	}
+    public static function getRoutes()
+    {
+    }
 }

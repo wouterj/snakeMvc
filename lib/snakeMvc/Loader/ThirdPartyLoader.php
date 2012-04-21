@@ -22,7 +22,8 @@ class ThirdPartyLoader extends AbstractLoader
 		$className = ltrim($className, '\\');
 		$path = '';
 		$namespace = '';
-		if ($lastNsPos = strripos($className, '\\')) {
+		if ( $lastNsPos = strripos($className, '\\') )
+		{
 			$namespace = substr($className, 0, $lastNsPos);
 			$className = substr($className, $lastNsPos + 1);
 			
@@ -32,7 +33,7 @@ class ThirdPartyLoader extends AbstractLoader
 			$path = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
 		}
 
-		foreach( $this->prefixes as $preName => $prePath )
+		foreach ( $this->prefixes as $preName => $prePath )
 		{
 			$className = str_replace($preName, $prePath.'_', $className);
 		}

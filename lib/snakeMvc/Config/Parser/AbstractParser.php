@@ -10,22 +10,22 @@ namespace snakeMvc\Framework\Config\Parser;
  */
 abstract class AbstractParser
 {
-	/**
-	 * The content of the parsed file
-	 *
-	 * @var string
-	 */
-	protected $file;
+    /**
+     * The content of the parsed file
+     *
+     * @var string
+     */
+    protected $file;
 
-	/**
-	 * Set the filename
-	 *
-	 * @param string $fileName The content of the parsing file
-	 */
-	public function __construct( $file )
-	{
-		$this->file = $file;
-	}
+    /**
+     * Set the filename
+     *
+     * @param string $fileName The content of the parsing file
+     */
+    public function __construct($file)
+    {
+        $this->file = $file;
+    }
 
-	abstract function parse();
+    abstract function parse();
 }
