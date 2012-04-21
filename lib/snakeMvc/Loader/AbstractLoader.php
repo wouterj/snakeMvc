@@ -25,12 +25,35 @@ abstract class AbstractLoader
 	 */
 	protected $prefixes = array();
 
+    /**
+     * Predefined classnames and their paths
+     *
+     * @var array
+     */
+    protected $classes = array();
+
 	/**
 	 * The basedirecotry for including
 	 *
 	 * @var string
 	 */
 	protected $base = '';
+
+    /**
+     * Set predefined classnames into a path
+     *
+     * @param array|string $name The name of the classes, if it's a array the key is the name and the value the path
+     * @param string $path The path of the class
+     */
+    public function setClasses($name, $path = null)
+    {
+        if (is_array($name) && $path === null) {
+            $this->classes = $name;
+        }
+        else {
+            $this->classes[$name] = $path;
+        }
+    }
 
 	/**
 	 * Set predefined prefixes if $name is a array, and add prefix if $name is a string

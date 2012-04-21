@@ -13,34 +13,11 @@ use snakeMvc\Framework\Config\Routes;
  */
 class FrontController
 {
-    /**
-     * The instance
-     *
-     * @var object
-     */
-    protected static $instance;
+    private $container;
 
-    final public function __wakeup() {
-        throw new BadMethodCallException(sprintf('%s is a singleton, it is not allowed to serialize it.', __CLASS__));
-    }
-    final public function __clone() {
-        throw new BadMethodCallException(srpintf('%s is a singleton, it is not allowed to clone it.', __CLASS__));
-    }
-    final private function __construct()
-    {}
-
-    /**
-     * Get the single instance
-     *
-     * @return object $instance The instance
-     */
-    public static function getInstance()
+    public function __construct($container)
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
+        $this->container = $container;
     }
 
     /**
@@ -57,7 +34,7 @@ class FrontController
             $method = $_SERVER['REQUEST_METHOD'];
             if ($r->matches($path, $method) === true) {
                 $controller = 'snakeMvc\Bundle\\'.APP_NAME.'\Controllers\\'.$r->getController().'Controller';
-                $controller = new $controller();
+                $controller = new $controller($this->container);
                 $response = call_user_func_array(array($controller, $r->getAction()), $r->getParams());
 
                 if (get_class($response) == 'snakeMvc\Framework\BrowserKit\Response') {

@@ -48,8 +48,24 @@ class IniParser extends AbstractParser
             }
         }
 
-        return ($getArray 
-                    ? $file 
-                    : ((object) $file));
+        if ($getArray) {
+            return $file;
+        }
+        else {
+            return $this->makeObj($file);
+        }
+    }
+
+    private function makeObj($array) 
+    {
+        $obj = new \StdClass();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                 $value = $this->makeObj($value);
+            }
+            $obj->$key = $value;
+        }
+
+        return $obj;
     }
 }

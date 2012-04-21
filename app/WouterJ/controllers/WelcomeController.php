@@ -3,14 +3,13 @@
 namespace snakeMvc\Bundle\WouterJ\Controllers;
 
 use snakeMvc\Framework\BrowserKit\Response;
-use snakeMvc\Framework\BrowserKit\Template;
 use snakeMvc\Framework\Controller\Controller;
 
 class WelcomeController extends Controller
 {
     public function index()
     {
-        $template = new Template();
+        $template = $this->getTemplate();
         return new Response($template->join('index.html.twig', 'site_name=WouterJ'));
     }
 

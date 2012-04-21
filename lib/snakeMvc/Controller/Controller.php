@@ -14,6 +14,17 @@ use snakeMvc\Framework\BrowserKit\Request;
 class Controller
 {
     private $request;
+    private $container;
+
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    public function getTemplate()
+    {
+        return $this->container['template'];
+    }
 
     public function getRequest()
     {

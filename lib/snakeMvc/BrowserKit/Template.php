@@ -14,14 +14,10 @@ class Template
     protected $content;
     protected $parser;
 
-    public function __construct()
+    public function __construct($parser)
     {
         try {
-            $loader = new \Twig_Loader_FileSystem(ROOT.'app'.DIRECTORY_SEPARATOR.APP_NAME.DIRECTORY_SEPARATOR.'templates');
-            $this->parser = new \Twig_Environment($loader, array(
-                'debug' => true,
-                'strict_variables' => true,
-            ));
+            $this->parser = $parser;
         }
         catch (Exception $e) {
             echo $e->getMessage();
