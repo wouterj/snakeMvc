@@ -5,7 +5,6 @@ use snakeMvc\Framework\Loader\ClassLoader;
 use snakeMvc\Framework\Loader\ThirdPartyLoader;
 use snakeMvc\Framework\Config\Parser\IniParser;
 use snakeMvc\Framework\Controller\FrontController;
-use snakeMvc\Framework\BrowserKit\Template;
 
 // for debugging routes
 // ini_set('xdebug.var_display_max_depth', 5);
@@ -48,22 +47,7 @@ define('APP_ROOT', ROOT.'app/'.APP_NAME.'/');
 /*
  * The dependency injenction code
  */
-$container = new \Pimple();
-
-$container['template.class.loader.path'] = ROOT.'app'.DIRECTORY_SEPARATOR.APP_NAME.DIRECTORY_SEPARATOR.'templates';
-$container['template.class.loader'] = function ($c) {
-    return new \Twig_Loader_FileSystem($c['template.class.loader.path']);
-};
-$container['template.class.config'] = array(
-    'debug' => true,
-    'strict_variables' => true,
-);
-$container['template.class'] = function ($c) {
-    return new \Twig_Environment($c['template.class.loader'], $c['template.class.config']);
-};
-$container['template'] = function ($c) {
-    return new Template($c['template.class']);
-};
+require_once LIB_ROOT.'snakeMvc/di.php';
 
 /*
  * the front controller code

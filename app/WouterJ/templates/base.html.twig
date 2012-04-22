@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang=nl>
+    <head>
+        <meta charset={% block charset %}utf-8{% endblock %}>
+        <title>{% block title %}Welkom bij snakeMvc{% endblock %}</title>
+        {% block stylesheets %}
+        <link rel=stylesheet href={{ asset('style.css') }}>
+        {% endblock %}
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
